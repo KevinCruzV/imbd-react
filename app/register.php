@@ -4,7 +4,7 @@ use Firebase\JWT\JWT;
 
 require_once 'headers.php';
 require_once 'Classes/PDOFactory.php';
-require_once 'Classes/TokenHelper.php';
+require_once 'Classes/JWT.php';
 require_once 'Classes/User.php';
 require_once 'Classes/CookieHelper.php';
 require_once  'vendor/autoload.php';

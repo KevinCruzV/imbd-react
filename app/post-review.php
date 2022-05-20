@@ -3,24 +3,17 @@
 use Firebase\JWT\JWT;
 
 require_once 'headers.php';
-require_once 'Classes/PDOFactory.php';
-require_once 'Classes/User.php';
-require_once 'Classes/Blog.php';
+require_once 'Class/PDOFactory.php';
+require_once 'Class/User.php';
+require_once 'Class/Post.php';
 require_once 'vendor/autoload.php';
 
-$token = str_replace('Bearer ', '', getallheaders()['Authorization'] ?? '') ?? '';
 
-/**
- * Je pourrais ne pas passer d'authorization en header
- * et simplement me servir du fait que le cookie d'auth
- * est passé également en requête !
- * Attention cependant à la validité du cookie.
- * Il faudrait le vérifier avant la requête, on en reparle
- * avec les Interceptor de Axios !
- */
-$token = $_COOKIE['hetic_token'] ?? '';
+
+$token = $_COOKIE['token'] ?? '';
 $blogTitle = $_POST['title'] ?? '';
 $blogContent = $_POST['content'] ?? '';
+
 
 if (!$token) {
     echo json_encode([
@@ -45,26 +38,28 @@ $pdo = $InstancePdo->getPdo();
 try {
 
 
-    $jwt = JWT::decode($token,new \Firebase\JWT\Key('une_petite_key_secrete', 'HS256'));
+    $jwt = JWT::decode($token,new \Firebase\JWT\Key('COUCOU', 'HS256'));
 
 
 
 
-    $blog = (new Blog())
+    $blog = (new Post())
         ->setTitle($blogTitle)
         ->setContent($blogContent)
         ->setAuthorId($jwt->userid);
 
-    $update = $pdo->prepare('INSERT INTO Blog (title, content, authorId, date) VALUES (:title, :content, :authorId, NOW())');
+    $update = $pdo->prepare('INSERT INTO Blog (title, content, author_id, film_id) VALUES (:title, :content, :authorId, NOW())');
     $update->bindValue('title', $blog->getTitle(), PDO::PARAM_STR);
     $update->bindValue('content', $blog->getContent(), PDO::PARAM_STR);
-    $update->bindValue('authorId', $jwt->userid, PDO::PARAM_INT);
+    $update->bindValue('author_id', $jwt->userid, PDO::PARAM_INT);
+    $update->bindValue('film_id', $jwt->userid, PDO::PARAM_INT);
+
 
     if ($update->execute()) {
         echo json_encode([
             'status' => 'success',
-            'message' => 'Blog saved',
-            'cookie' => $_COOKIE['hetic_token'] ?? 'expired cookie'
+            'message' => 'post saved',
+            'cookie' => $_COOKIE['token'] ?? 'expired cookie'
         ]);
     }
 

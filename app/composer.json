@@ -11,5 +11,9 @@
             "email": "72854509+KevinCruzV@users.noreply.github.com"
         }
     ],
-    "require": {}
+    "require": {
+        "firebase/php-jwt": "^6.2",
+      "ext-pdo": "*",
+        "ext-json": "*"
+    }
 }

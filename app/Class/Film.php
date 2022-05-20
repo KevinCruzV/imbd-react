@@ -3,7 +3,7 @@
 class Film
 {
     private $id;
-    private $real;
+    private $realisateur;
     private $date;
     private $title;
     private $img;
@@ -49,16 +49,16 @@ class Film
      */
     public function getReal()
     {
-        return $this->real;
+        return $this->realisateur;
     }
 
     /**
-     * @param mixed $real
+     * @param $realisateur
      * @return Film
      */
-    public function setReal($real)
+    public function setReal($realisateur): Film
     {
-        $this->real = $real;
+        $this->realisateur = $realisateur;
         return $this;
     }
 

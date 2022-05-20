@@ -1,9 +1,9 @@
 <?php
 
 require_once 'headers.php';
-require_once 'Classes/PDOFactory.php';
-require_once 'Classes/User.php';
-require_once 'Classes/CookieHelper.php';
+require_once 'Class/PDOFactory.php';
+require_once 'Class/User.php';
+require_once 'Class/CookieHelper.php';
 require_once './vendor/autoload.php';
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -23,7 +23,7 @@ if (!$username || !$password) {
 
 
 $pdo = (new PDOFactory())->getPdo();
-$query = $pdo->prepare('SELECT * FROM `User` WHERE `username` = :username');
+$query = $pdo->prepare('SELECT * FROM `user` WHERE `username` = :username');
 $query->bindValue('username', $username, PDO::PARAM_STR);
 $query->setFetchMode(PDO::FETCH_CLASS, User::class);
 if ($query->execute()) {

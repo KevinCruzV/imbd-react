@@ -6,7 +6,8 @@ class PDOFactory
 
     public function __construct()
     {
-        $this->pdo = new PDO('mysql:host=db;dbname=data', 'root', 'password');
+        $this->pdo = new PDO('mysql:host=db;dbname=data;charset=utf8', 'root', 'password');
+
     }
 
     /**

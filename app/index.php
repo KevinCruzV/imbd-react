@@ -1,25 +1,26 @@
 <?php
 
 require_once 'headers.php';
-require_once 'Classes/PDOFactory.php';
-require_once 'Classes/Blog.php';
+require_once 'Class/PDOFactory.php';
+require_once 'Class/Post.php';
 
 $pdo = (new PDOFactory())->getPdo();
 
-$query = $pdo->query('SELECT * FROM User INNER JOIN Blog ON Blog.authorId = User.id ORDER BY `date` DESC');
+//$query = $pdo->query('SELECT * FROM post p JOIN film f ON p.film_id = f.id');
+$query = $pdo->query('SELECT * FROM film ORDER BY date DESC');
 $query->setFetchMode(PDO::FETCH_ASSOC);
 
 $res = [];
 
-foreach ($query->fetchAll() as $post) {
-//    var_dump($post);
-    $res[] = [
-        'id' => $post['id'],
-        "date" => $post['date'],
-        'title' => $post['title'],
-        'content' => $post['content'],
-        'author' => $post['username']
-    ];
+foreach ($query->fetchAll() as $film) {
+   var_dump($film);
+//    $res[] = [
+//        'id' => $film['id'],
+//        "date" => $film['created'],
+//        'title' => $film['title'],
+//        'content' => $film['content'],
+//        'author' => $film['username']
+//    ];
 }
 
-echo json_encode($res);
+//echo json_encode($res);
