@@ -1,17 +1,17 @@
 import {BrowserRouter, Routes, Route, Link, useNavigate, NavLink} from "react-router-dom";
-import Home from "./Components/Home";
-import LoginHook from "./Components/LoginHook";
-import FilmSingle from "./Components/FilmSingle";
-import SearchForm from "./Components/SearchForm";
-import Films from "./Components/Films";
-import Page404 from "./Components/Page404";
 import {useEffect, useReducer, useState} from "@types/react";
 import {LoginResponseInterface} from "./Interfaces/ResponseInterface";
 import {configureStore} from "@reduxjs/toolkit";
 import {UserInterface} from "./Interfaces/UserInterface";
 import HideIfLogged from "./Components/HideIfLogged";
+import HideIfNotLogged from "./Components/HideIfNotLogged";
 import LoginForm from "./Components/Login";
-import * as PropTypes from "prop-types";
+import useLogin from "./Hook/useLogin";
+import useGetCookies from "./Hook/useGetCookies";
+import useEraseCookie from "./Hook/useEraseCookie";
+import NeedAuth from "./Components/NeedAuth";
+import FilmList from "./Components/FilmList";
+import useGetFilmList from "./Hook/useGetFilmList";
 
 export const store = configureStore({
     reducer: {
@@ -20,14 +20,8 @@ export const store = configureStore({
     }
 })
 
-function CommentForm(props) {
-    return null;
-}
 
-CommentForm.propTypes = {
-    setNeedsUpdate: PropTypes.any,
-    loggedUser: PropTypes.any
-};
+
 export default function Router() {
 
     const [loggedUser, setLoggedUser] = useState<LoginResponseInterface>({
@@ -46,7 +40,7 @@ export default function Router() {
 
     const login = useLogin();
     // const register = useRegister();
-    const getMovieList = useGetMovieList();
+    const getMovieList = useGetFilmList();
     const cookies = useGetCookies();
     const eraseCookie = useEraseCookie();
 
@@ -90,14 +84,14 @@ export default function Router() {
 
     }
 
-    const [count, dispatch] = useReducer(Reducer, 0);
+
 
 
 
     return(
         <BrowserRouter>
 
-            <Gigabar movieList={movieList}/>
+
             <div className='container mt-5'>
                 <HideIfLogged loggedUser={loggedUser}>
                     <LoginForm setLocalUser={setLocalUser} needsLogin={needsLogin} setNeedsLogin={setNeedsLogin} />
@@ -112,13 +106,13 @@ export default function Router() {
                     <Route path='/' element={
                         <NeedAuth>
 
-                            <MovieList movieList={movieList} />
+                            <FilmList filmlist={movieList} />
                         </NeedAuth>
                     } />
-                    <Route path="/" element={<MovieList movieList={movieList} />} />
+                    <Route path="/" element={<FilmList filmlist={movieList}/>} />
                     <Route path="/mes-posts/" element={
                         <NeedAuth>
-                            <MovieList movieList={movieList} />
+                            <FilmList filmlist={movieList} />
                         </NeedAuth>
                     } />
                     <Route path="/autres-posts/" element={
@@ -127,10 +121,6 @@ export default function Router() {
                         </NeedAuth>
                     } />
                 </Routes>
-                <div>
-                    <h1>Compteur : {count}</h1>
-                    <button onClick={() => dispatch({type: 'INCREMENT'})}>J'ajoute des trucs</button>
-                </div>
             </div>
         </BrowserRouter>
 )};
